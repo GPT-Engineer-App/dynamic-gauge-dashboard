@@ -1,8 +1,24 @@
 // Update this page (the content is just a fallback if you fail to update the page)
 
 import { useState } from 'react';
-import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { Slider } from "@/components/ui/slider";
+
+const StepIcon = ({ value, color, step }) => (
+  <svg width="144.9" height="112" viewBox="0 0 144.9 112" className="w-full h-auto">
+    <g>
+      <path fill={color} d="M116.9,40.5H10.6c-7.4,0-11.8,8.4-7.5,14.5l11.1,16c2.2,3.1,2.2,7.2,0,10.4l-11,16c-4.2,6.1,0.2,14.5,7.6,14.5h106.1c3,0,5.9-1.5,7.6-4l18.2-26.5c2.1-3.1,2.1-7.2,0-10.3l-18.2-26.5C122.7,42,119.9,40.5,116.9,40.5z"/>
+    </g>
+    <g>
+      <g>
+        <path fill="#FEFBFF" d="M30.8,0.5h80v80h-80V0.5z"/>
+        <path fill="none" stroke="#FFA945" strokeWidth="4" d="M70.8,0.5c-22.1,0-40,17.9-40,40s17.9,40,40,40c22.1,0,40-17.9,40-40S92.9,0.5,70.8,0.5z"/>
+      </g>
+    </g>
+    <text x="72" y="65" textAnchor="middle" fill="#FEFBFF" fontSize="24" fontWeight="bold">{value}%</text>
+    <text x="72" y="85" textAnchor="middle" fill="#FEFBFF" fontSize="16">Step {step}</text>
+  </svg>
+);
 
 const Index = () => {
   const [gaugeValue, setGaugeValue] = useState(50);
@@ -32,7 +48,7 @@ const Index = () => {
     { name: 'Title 3', value: gaugeValue * 1.44 },
   ];
 
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+  const COLORS = ['#FFA945', '#FF5733', '#8A2BE2', '#4169E1'];
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-purple-100 to-pink-100 p-4">
@@ -40,13 +56,19 @@ const Index = () => {
       <p className="text-center text-gray-600 mb-8">This infographic showcases dynamic data visualization controlled by the gauge at the bottom.</p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
-        <div className="bg-white rounded-lg shadow-md p-4">
+        <div className="bg-white rounded-lg shadow-md p-4 col-span-1 md:col-span-2 lg:col-span-3">
           <h2 className="text-xl font-semibold mb-2">Data 1: Step Progress</h2>
-          <ResponsiveContainer width="100%" height={200}>
-            <LineChart data={data1}>
-              <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
-            </LineChart>
-          </ResponsiveContainer>
+          <div className="flex flex-wrap justify-around items-center">
+            {data1.map((item, index) => (
+              <div key={index} className="w-1/2 sm:w-1/4 p-2">
+                <StepIcon
+                  value={Math.round(item.value)}
+                  color={COLORS[index % COLORS.length]}
+                  step={index + 1}
+                />
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-4">
